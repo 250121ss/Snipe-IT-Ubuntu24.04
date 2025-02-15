@@ -1,1 +1,2 @@
-# Snipe-IT-Ubuntu24.04
+# Snipe-IT-Ubuntu 24.04
+# Please Watch = 👉 https://www.youtube.com/@linuxnetworkinghelp/videos 👈
