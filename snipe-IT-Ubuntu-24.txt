@@ -11,13 +11,9 @@ Step 2: Install PHP
 
 Step 3: Install Composer
 
-    Composer install
-    sudo apt-get install composer	
-
-    cd ~
-    curl -sS https://getcomposer.org/installer -o composer-setup.php
+    sudo wget -O composer-setup.php https://getcomposer.org/installer
     sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
+    
 Step 4: Install MariaDB & Create Database
 
     sudo apt install mariadb-server  
