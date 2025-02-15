@@ -1,0 +1,87 @@
+
+=================  Snipe-IT Installation on Ubuntu 24.04  = =============
+
+Step 1: Update the System
+
+               sudo apt update
+
+Step 2: Install PHP
+
+              sudo apt install php-{bcmath,common,ctype,curl,fileinfo,fpm,gd,iconv,intl,mbstring,mysql,soap,xml,xsl,zip,cli}
+
+Step 3: Install Composer
+
+    Composer install
+    sudo apt-get install composer	
+
+    cd ~
+    curl -sS https://getcomposer.org/installer -o composer-setup.php
+    sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+Step 4: Install MariaDB & Create Database
+
+    sudo apt install mariadb-server  
+
+Create a database and user:
+
+
+    sudo mysql -e "CREATE DATABASE snipeit;  
+    GRANT ALL ON snipeit.* TO 'snipeit'@'localhost' IDENTIFIED BY 'your_password';  
+    FLUSH PRIVILEGES;"
+
+
+Step 5: Download & Configure Snipe-IT
+
+  sudo git clone https://github.com/snipe/snipe-it snipe-it  
+  cd snipe-it  
+
+SymLink Setup : 
+
+    sudo cp .env.example .env  
+    sudo vi .env  
+
+Set permissions: 
+
+    sudo chown -R www-data: snipe-it  
+    sudo composer update --no-plugins --no-scripts  
+    sudo composer install --no-dev --prefer-source --no-plugins --no-scripts  
+    sudo php artisan key:generate  
+
+Step 6: Install & Configure Nginx
+
+   sudo apt install nginx  
+   sudo nano /etc/nginx/conf.d/snipeit.conf  
+
+-==
+
+
+server {
+    listen 80;
+    server_name domain or ip ;
+    root /var/www/html/snipe-it/public;
+    index index.php;
+    
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    
+    location ~ \.php$ {
+        include fastcgi.conf;
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+
+Restart Nginx:
+
+    sudo systemctl restart nginx  
+
+
+Done.....
+
+
+
+
